@@ -1,0 +1,26 @@
+CREATE PROJECT (STEPS):
+----------------------------------------------------------------------------------------
+
+cds init
+cds add hana
+cf create-service hana hdi-shared basiccap-db
+Create xs-security.json file
+cds compile srv --to xsuaa > xs-security.json
+cf create-service xsuaa application basiccap-xsuaa -c xs-security.json
+Modify package.json
+npm i passport
+cds add cf-manifest
+cds build --production
+cf push
+
+mbt build
+cf deploy mta_archives/basiccap_1.0.0.mtar
+
+
+CLEANUP:
+----------------------------------------------------------------------------------------
+
+cf d basiccap-srv -r -f
+cf d basiccap-db-deployer -r -f
+cf ds basiccap-xsuaa -f
+cf ds basiccap-db -f

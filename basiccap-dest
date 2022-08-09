@@ -1,0 +1,13 @@
+#clientSecret=<< Existing password/certificate removed on export >>
+#
+#Tue Aug 09 10:00:13 UTC 2022
+Type=HTTP
+clientId=sb-basiccap-team3601\!t131596
+HTML5.DynamicDestination=true
+Authentication=OAuth2JWTBearer
+Name=basiccap-dest
+tokenServiceURL=https\://ic2022.authentication.eu10.hana.ondemand.com/oauth/token/
+ProxyType=Internet
+URL=https\://cf-ic2022-team3601-basiccap-srv.cfapps.eu10-004.hana.ondemand.com/service/demo
+tokenServiceURLType=Dedicated
+AppgyverEnabled=true

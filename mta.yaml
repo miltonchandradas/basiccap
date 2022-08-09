@@ -1,0 +1,97 @@
+## Generated mta.yaml based on template version 0.4.0
+## appName = basiccap
+## language=nodejs; multitenant=false
+## approuter=
+_schema-version: '3.1'
+ID: basiccap
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+   
+build-parameters:
+  before-all:
+   - builder: custom
+     commands:
+      - npm install --production
+      - npx -p @sap/cds-dk cds build --production
+
+modules:
+  # ------------------ APP ROUTER MODULE -----------------------
+ - name: basiccap
+  # ------------------------------------------------------------
+   type: approuter.nodejs
+   path: approuter
+   build-parameters:
+     ignore:
+       - default-*.json
+       - .env
+       - "*node_modules*"
+   parameters:
+     memory: 256M
+     disk-quota: 1024M
+   requires:
+     - name: basiccap-xsuaa
+     - name: srv-api
+       group: destinations
+       properties:
+          name: srv
+          url: ~{srv-url}
+          timeout: 60000
+          forwardAuthToken: true
+
+
+ # --------------------- SERVER MODULE ------------------------
+ - name: basiccap-srv
+ # ------------------------------------------------------------
+   type: nodejs
+   path: gen/srv
+   parameters:
+     buildpack: nodejs_buildpack
+   requires:
+    # Resources extracted from CAP configuration
+    - name: basiccap-db
+    - name: basiccap-xsuaa
+   provides:
+    - name: srv-api      # required by consumers of CAP services (e.g. approuter)
+      properties:
+        srv-url: ${default-url}
+
+ # -------------------- SIDECAR MODULE ------------------------
+ - name: basiccap-db-deployer
+ # ------------------------------------------------------------
+   type: hdb
+   path: gen/db  
+   parameters:
+     buildpack: nodejs_buildpack
+   requires:
+    # 'hana' and 'xsuaa' resources extracted from CAP configuration
+    - name: basiccap-db
+    - name: basiccap-xsuaa
+
+
+resources:
+ # services extracted from CAP configuration
+ # 'service-plan' can be configured via 'cds.requires.<name>.vcap.plan'
+# ------------------------------------------------------------
+ - name: basiccap-db
+# ------------------------------------------------------------
+   type: com.sap.xs.hdi-container
+   parameters:
+     service: hana  # or 'hanatrial' on trial landscapes
+     service-plan: hdi-shared
+   properties:
+     hdi-service-name: ${service-name}
+# ------------------------------------------------------------
+ - name: basiccap-xsuaa
+# ------------------------------------------------------------
+   type: org.cloudfoundry.managed-service
+   parameters:
+     service: xsuaa
+     service-plan: application
+     path: ./xs-security.json  
+     config:
+       xsappname: basiccap-${space}    #  name + space dependency
+       tenant-mode: dedicated
+
+

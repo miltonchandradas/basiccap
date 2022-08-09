@@ -1,0 +1,12 @@
+{
+    "authenticationMethod": "route",
+    "routes": [
+      {
+        "source": "^/service/(.*)$",
+        "authenticationType": "xsuaa",
+        "scope": "$XSAPPNAME.Admin",
+        "destination": "srv"
+      }
+    ]
+  }
+  

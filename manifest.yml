@@ -1,0 +1,30 @@
+# Generated manifest.yml based on template version 0.1.0
+# appName = basiccap
+# language=nodejs
+# multitenancy=false
+---
+applications:
+# -----------------------------------------------------------------------------------
+# Backend Service
+# -----------------------------------------------------------------------------------
+- name: basiccap-srv
+  random-route: true  # for development only
+  path: gen/srv
+  memory: 256M
+  buildpacks: [nodejs_buildpack]
+  services:
+  - basiccap-db
+  - basiccap-xsuaa
+
+# -----------------------------------------------------------------------------------
+# HANA Database Content Deployer App
+# -----------------------------------------------------------------------------------
+- name: basiccap-db-deployer
+  path: gen/db
+  no-route: true
+  health-check-type: process
+  memory: 256M
+  instances: 1
+  buildpacks: [nodejs_buildpack]
+  services:
+  - basiccap-db

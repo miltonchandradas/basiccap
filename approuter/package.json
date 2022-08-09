@@ -1,0 +1,17 @@
+{
+  "name": "approuter",
+  "version": "1.0.0",
+  "description": "AppRouter",
+  "main": "server.js",
+  "scripts": {
+    "start": "node node_modules/@sap/approuter/approuter.js"
+  },
+  "engines": {
+    "node": "^16"
+  },
+  "author": "Milton Chandradas",
+  "license": "ISC",
+  "dependencies": {
+    "@sap/approuter": "^11.3.2"
+  }
+}
