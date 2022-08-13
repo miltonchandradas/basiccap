@@ -13,6 +13,11 @@ cds add cf-manifest
 cds build --production
 cf push
 
+
+SETUP:
+----------------------------------------------------------------------------------------
+cf create-service hana hdi-shared basiccap-db
+cf create-service xsuaa application basiccap-xsuaa -c xs-security.json
 mbt build
 cf deploy mta_archives/basiccap_1.0.0.mtar
 
@@ -20,6 +25,7 @@ cf deploy mta_archives/basiccap_1.0.0.mtar
 CLEANUP:
 ----------------------------------------------------------------------------------------
 
+cf d basiccap -r -f
 cf d basiccap-srv -r -f
 cf d basiccap-db-deployer -r -f
 cf ds basiccap-xsuaa -f

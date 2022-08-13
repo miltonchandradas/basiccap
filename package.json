@@ -9,6 +9,7 @@
       "node": "^16"
    },
    "dependencies": {
+      "@sap-cloud-sdk/core": "^1.54.2",
       "@sap/cds": "^6.0.4",
       "@sap/xssec": "^3.2.13",
       "express": "^4",
