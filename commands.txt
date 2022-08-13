@@ -10,6 +10,7 @@ cf create-service xsuaa application basiccap-xsuaa -c xs-security.json
 Modify package.json
 npm i passport
 cds add cf-manifest
+cds add mta
 cds build --production
 cf push
 
